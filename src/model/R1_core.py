@@ -1,7 +1,7 @@
-import pandas as pd, numpy as np, itertools, gc
+import os, pandas as pd, numpy as np, itertools, gc
 from sklearn.ensemble import HistGradientBoostingRegressor
 from scipy import stats
-d=pd.read_csv("atp_fixB.csv"); d=d[d.seq.str.len()==10]
+d=pd.read_csv(os.environ.get("ATP_DATA","data/atp_corrected.csv.gz")); d=d[d.seq.str.len()==10]
 g=d.groupby("seq").agg(y=("ratio","mean"),k=("ratio","size"),B=("B","mean")); del d; gc.collect()
 s=g.index.to_numpy(); y=g["y"].to_numpy().astype(np.float32)
 k=g["k"].to_numpy(); B=g["B"].to_numpy().astype(np.float32); N=len(s)
